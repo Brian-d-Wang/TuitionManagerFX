@@ -47,9 +47,9 @@ public class Date implements Comparable<Date>{
             year = STARTING;
         }
         else {
-            month = Integer.parseInt(album_date.nextToken("/"));
-            day = Integer.parseInt(album_date.nextToken("/"));
-            year = Integer.parseInt(album_date.nextToken());
+            year = Integer.parseInt(album_date.nextToken("-"));
+            month = Integer.parseInt(album_date.nextToken("-"));
+            day = Integer.parseInt(album_date.nextToken());
         }
     }
 
@@ -73,7 +73,6 @@ public class Date implements Comparable<Date>{
         this.isLeapYear = false;//resets boolean flag for leap year
         Calendar curr_date = Calendar.getInstance();
         int cMonth = curr_date.get(Calendar.MONTH) + 1;
-
         if(this.year < TWOTHOUSANDONE)
             return false;
 

@@ -18,7 +18,7 @@ public class Controller {
     public static final int EMPTY = 0;
 
     @FXML
-    private TextField name, creditHours, payment, paymentDue, tuitionDue,fAid;
+    private TextField name, creditHours, payment, sName,paymentAmount,fAid;
 
     @FXML
     private DatePicker paymentDate;
@@ -35,13 +35,15 @@ public class Controller {
 
     /**
      * Clears student info in tab1
-     * @param event
      */
     @FXML
-    void tab1(ActionEvent event){
-        name.clear();
-        creditHours.clear();
-        tuitionDue.clear();
+    void tab1(){
+        if(!name.getText().isEmpty())
+            name.clear();
+        if(!creditHours.getText().isEmpty())
+            creditHours.clear();
+        if(!payment.getText().isEmpty())
+            payment.clear();
         major.getToggles().forEach(toggle -> {
             RadioButton tempButton = (RadioButton) toggle;
             tempButton.setSelected(false);
@@ -51,6 +53,41 @@ public class Controller {
             tempButton.setSelected(false);
         });
         state.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+    }
+
+    @FXML
+    void tab1Tuition(){
+        if(!name.getText().isEmpty())
+            name.clear();
+        if(!creditHours.getText().isEmpty())
+            creditHours.clear();
+        major.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+        typeOfResident.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+        state.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+    }
+
+    @FXML
+    void tab2(){
+        if(!sName.getText().isEmpty())
+            sName.clear();
+        if(!paymentAmount.getText().isEmpty())
+            paymentAmount.clear();
+        if(!fAid.getText().isEmpty())
+            fAid.clear();
+        paymentDate.setValue(null);
+        major.getToggles().forEach(toggle -> {
             RadioButton tempButton = (RadioButton) toggle;
             tempButton.setSelected(false);
         });
@@ -100,19 +137,6 @@ public class Controller {
     }
 
     /**
-     * Disable radio buttons if they are a resident
-     * @param event
-     */
-    @FXML
-    void residentToggle(ActionEvent event) {
-        typeOfResident.getToggles().forEach(toggle -> {
-            RadioButton tempButton = (RadioButton) toggle;
-            tempButton.setDisable(true);
-        });
-        //international.setSelected(false);
-    }
-
-    /**
      * Event Handler for the Add Student button
      * Adds Student using user input to roster
      * @param event
@@ -158,6 +182,94 @@ public class Controller {
 
 
         return(new Profile(studentName, tempMajor));
+    }
+
+    @FXML
+    void remove(ActionEvent event){
+        if(name.getText().isEmpty()){
+            display.appendText("Name not inputted \n");
+            return;
+        }
+        String currName = name.getText();
+        Major tempMajor = null;
+        if(major.getSelectedToggle() != null)
+        {
+            tempMajor = Major.valueOf(((RadioButton) major.getSelectedToggle()).getText());
+        }
+        else
+        {
+            display.appendText("Missing student major \n");
+            return;
+        }
+        Profile tempProf = new Profile(currName,tempMajor);
+        Student currStudent = new Student(tempProf);
+        if(list.remove(currStudent))
+            display.appendText("Student removed from roster \n");
+        else
+            display.appendText("Student is not in the roster \n");
+
+        typeOfResident.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+
+        state.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+
+        major.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+        this.tab1();
+    }
+
+    @FXML
+    void calcStudent(){
+        if(!payment.getText().isEmpty())
+            payment.clear();
+        if(name.getText().isEmpty()){
+            display.appendText("Name not inputted \n");
+            return;
+        }
+        String currName = name.getText();
+        Major tempMajor = null;
+        if(major.getSelectedToggle() != null)
+        {
+            tempMajor = Major.valueOf(((RadioButton) major.getSelectedToggle()).getText());
+        }
+        else
+        {
+            display.appendText("Missing student major \n");
+            return;
+        }
+        Profile tempProf = new Profile(currName,tempMajor);
+        Student currStudent = new Student(tempProf);
+        int index = find(list,currStudent);
+        if(index == MISSING){
+            display.appendText("Student not in roster \n");
+            return;
+        }
+        if (list.getRoster()[index].getTotalPayments() == 0 && list.getRoster()[index].getTuition() == 0)
+            list.getRoster()[index].tuitionDue();
+        payment.appendText(list.getRoster()[index].getTuition() + "");
+        display.appendText("Tuition displayed next to Tuition Due and tuition updated in roster \n");
+        tab1Tuition();
+    }
+
+
+    @FXML
+    void calcTuition(ActionEvent event){
+        if(list.getSize() == EMPTY){
+            display.appendText("No Students to compute \n");
+            return;
+        }
+        for(int i = 0; i < list.getSize(); i++) {
+            if (list.getRoster()[i].getTotalPayments() == 0 && list.getRoster()[i].getTuition() == 0)
+                list.getRoster()[i].tuitionDue();
+        }
+        display.appendText("Calculation completed \n");
     }
 
     /**

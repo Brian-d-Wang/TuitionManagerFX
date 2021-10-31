@@ -164,7 +164,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Tuition Due" />
+                                    <Button mnemonicParsing="false" onAction="#calcStudent" text="Tuition Due" />
                                     <Label prefHeight="29.0" prefWidth="24.0" text="\$">
                                        <padding>
                                           <Insets bottom="5.0" left="20.0" />
@@ -201,7 +201,7 @@
                           </rowConstraints>
                            <children>
                               <Label text="Student Name" GridPane.halignment="RIGHT" />
-                              <TextField GridPane.columnIndex="1" />
+                              <TextField fx:id="sName" GridPane.columnIndex="1" />
                               <Label text="Major" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                               <Label text="Payment Amount" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
                               <Label text="Payment Date" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
@@ -248,7 +248,7 @@
                                           <Insets top="9.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField promptText="0.00">
+                                    <TextField fx:id="paymentAmount" promptText="0.00">
                                        <HBox.margin>
                                           <Insets top="7.0" />
                                        </HBox.margin>
@@ -262,7 +262,7 @@
                                           <Insets top="8.0" />
                                        </HBox.margin>
                                     </DatePicker>
-                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Pay">
+                                    <Button mnemonicParsing="false" onAction="#pay" prefHeight="25.0" prefWidth="125.0" text="Pay">
                                        <HBox.margin>
                                           <Insets left="10.0" top="8.0" />
                                        </HBox.margin>
@@ -279,12 +279,12 @@
                                           <Insets top="9.0" />
                                        </HBox.margin>
                                     </Label>
-                                    <TextField promptText="0.00">
+                                    <TextField fx:id="fAid" promptText="0.00">
                                        <HBox.margin>
                                           <Insets top="7.0" />
                                        </HBox.margin>
                                     </TextField>
-                                    <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="133.0" text="Set">
+                                    <Button mnemonicParsing="false" onAction="#set" prefHeight="25.0" prefWidth="133.0" text="Set">
                                        <HBox.margin>
                                           <Insets left="8.0" top="8.0" />
                                        </HBox.margin>
@@ -305,7 +305,7 @@
                           <menus>
                             <Menu mnemonicParsing="false" text="Tuition">
                               <items>
-                                <MenuItem mnemonicParsing="false" text="Calculate" />
+                                <MenuItem mnemonicParsing="false" onAction="#calcTuition" text="Calculate" />
                               </items>
                             </Menu>
                             <Menu mnemonicParsing="false" text="Print">

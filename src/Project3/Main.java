@@ -22,7 +22,7 @@ public class Main extends Application {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("View.fxml"));
             primaryStage.setTitle("Tuition Manager");
-            primaryStage.setScene(new Scene(root, 650, 550));
+            primaryStage.setScene(new Scene(root, 750, 550));
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();

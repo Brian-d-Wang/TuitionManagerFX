@@ -115,7 +115,7 @@ public class Roster {
         ret = ret + "* list of students in the roster ** \n";
         for(int i = 0; i < this.size; i++)
             ret = ret + this.roster[i].toString() + "\n";
-        ret = ret + "* end of of roster ** \n";
+        ret = ret + "* end of of roster ** ";
         return ret;
     }
 
@@ -130,6 +130,13 @@ public class Roster {
             ret = ret + this.roster[i].toString() + "\n";
         return ret;
     }
+
+    /*
+    public String printStudent(){
+        return this.roster[this.size -1].toString() ;
+    }
+    */
+
 
     /**
      * Prints the list of Students in the Roster as is
@@ -167,8 +174,8 @@ public class Roster {
         String ret ="";
         ret = ret + "* list of students ordered by name **\n";
         sortBoth(this.roster, LOW, this.size - 1, BY_NAME);
-        ret = ret + this.printName() + "\n";
-        ret = ret + "** end of roster ** \n";
+        ret = ret + this.printName() + "";
+        ret = ret + "** end of roster ** ";
         return ret;
     }
     /**
