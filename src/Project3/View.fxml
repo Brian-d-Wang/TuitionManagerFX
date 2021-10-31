@@ -90,7 +90,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="Resident">
+                                    <RadioButton mnemonicParsing="false" onAction="#isAResident" text="Resident">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
@@ -98,7 +98,7 @@
                                           <ToggleGroup fx:id="typeOfResident" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton mnemonicParsing="false" text="Non-Resident" toggleGroup="$typeOfResident">
+                                    <RadioButton mnemonicParsing="false" onAction="#isNonResident" text="Non-Resident" toggleGroup="$typeOfResident">
                                        <HBox.margin>
                                           <Insets left="20.0" top="5.0" />
                                        </HBox.margin>
@@ -110,7 +110,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="TriState" toggleGroup="$typeOfResident">
+                                    <RadioButton mnemonicParsing="false" onAction="#isATriState" text="TriState" toggleGroup="$typeOfResident">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
@@ -135,12 +135,12 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
-                                    <RadioButton mnemonicParsing="false" text="International" toggleGroup="$typeOfResident">
+                                    <RadioButton mnemonicParsing="false" onAction="#isInternational" text="International" toggleGroup="$typeOfResident">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
                                     </RadioButton>
-                                    <CheckBox mnemonicParsing="false" text="Study Aroad">
+                                    <CheckBox fx:id="international" mnemonicParsing="false" text="Study Aroad">
                                        <HBox.margin>
                                           <Insets left="20.0" top="5.0" />
                                        </HBox.margin>
@@ -155,7 +155,7 @@
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#add" text="Add Student" />
-                                    <Button mnemonicParsing="false" text="Remove Student">
+                                    <Button mnemonicParsing="false" onAction="#remove" text="Remove Student">
                                        <HBox.margin>
                                           <Insets left="30.0" />
                                        </HBox.margin>
@@ -257,7 +257,7 @@
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                  <children>
-                                    <DatePicker prefHeight="25.0" prefWidth="156.0">
+                                    <DatePicker fx:id="paymentDate" prefHeight="25.0" prefWidth="156.0">
                                        <HBox.margin>
                                           <Insets top="8.0" />
                                        </HBox.margin>
@@ -310,9 +310,9 @@
                             </Menu>
                             <Menu mnemonicParsing="false" text="Print">
                               <items>
-                                <MenuItem mnemonicParsing="false" text="Print as is" />
-                                    <MenuItem mnemonicParsing="false" text="Print by Name" />
-                                    <MenuItem mnemonicParsing="false" text="Print by Payment Date" />
+                                <MenuItem mnemonicParsing="false" onAction="#print" text="Print as is" />
+                                    <MenuItem mnemonicParsing="false" onAction="#printName" text="Print by Name" />
+                                    <MenuItem mnemonicParsing="false" onAction="#printPayment" text="Print by Payment Date" />
                               </items>
                             </Menu>
                             <Menu mnemonicParsing="false" text="Help">
@@ -330,6 +330,6 @@
       </TabPane>
    </top>
    <bottom>
-      <TextArea prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <TextArea fx:id="display" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

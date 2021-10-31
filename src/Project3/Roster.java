@@ -107,15 +107,16 @@ public class Roster {
     /**
      * prints out the roster with no specific order
      */
-    public void print() {
+    public String print() {
         if(this.size == LOW){
-            System.out.println("Student roster is empty!");
-            return;
+            return "Student roster is empty!";
         }
-        System.out.println("* list of students in the roster **");
+        String ret = "";
+        ret = ret + "* list of students in the roster ** \n";
         for(int i = 0; i < this.size; i++)
-            System.out.println(this.roster[i].toString());
-        System.out.println("* end of of roster **");
+            ret = ret + this.roster[i].toString() + "\n";
+        ret = ret + "* end of of roster ** \n";
+        return ret;
     }
 
 
@@ -123,46 +124,52 @@ public class Roster {
      * Prints the list of Students in the Roster as is
      * Used for printing by name
      */
-    public void printName() {
+    public String printName() {
+        String ret ="";
         for(int i = 0; i < this.size; i++)
-            System.out.println(this.roster[i].toString());
+            ret = ret + this.roster[i].toString() + "\n";
+        return ret;
     }
 
     /**
      * Prints the list of Students in the Roster as is
      * Used for printing paid students by release date
      */
-    public void printDate() {
+    public String printDate() {
+        String ret ="";
         for(int i = 0; i < this.size; i++)
             if(this.roster[i].getTotalPayments()!=0)
-                System.out.println(this.roster[i].toString());
+               ret = ret + this.roster[i].toString() + "\n";
+        return ret;
     }
 
     /**
      * Prints the list of Students in the Roster by date paid in ascending order.
      */
-    public void printByPaymentDate() {
+    public String printByPaymentDate() {
         if(this.size == 0){
-            System.out.println("Student roster is empty!");
-            return;
+            return "Student roster is empty!";
         }
-        System.out.println("* list of students made payments ordered by payment date **");
+        String ret ="";
+        ret = ret + "* list of students made payments ordered by payment date ** \n";
         sortBoth(this.roster, LOW, this.size - 1, BY_DATE);
-        this.printDate();
-        System.out.println("* end of roster **");
+        ret = ret + this.printDate();
+        ret = ret +"* end of roster **";
+        return ret;
     }
     /**
      * Prints the list of Students in the Roster by their name in alphabetical order.
      */
-    public void printByName() {
+    public String printByName() {
         if(this.size == 0){
-            System.out.println("Student roster is empty!");
-            return;
+            return "Student roster is empty!";
         }
-        System.out.println("* list of students ordered by name **");
+        String ret ="";
+        ret = ret + "* list of students ordered by name **\n";
         sortBoth(this.roster, LOW, this.size - 1, BY_NAME);
-        this.printName();
-        System.out.println("** end of roster **");
+        ret = ret + this.printName() + "\n";
+        ret = ret + "** end of roster ** \n";
+        return ret;
     }
     /**
      * Quick sort method that sorts the students in roster in ascending order.
