@@ -16,6 +16,11 @@ public class Controller {
     private Roster list = new Roster();
 
     public static final int EMPTY = 0;
+    public static final int MINCRED = 3;
+    public static final int NEGCRED = 0;
+    public static final int MAXCRED = 24;
+    public static final int INTERNATIONALCREDIT = 12;
+    public static final int MISSING = -1;
 
     @FXML
     private TextField name, creditHours, payment, sName,paymentAmount,fAid;
@@ -142,10 +147,42 @@ public class Controller {
      * @param event
      */
     @FXML
+    /*remove later
+private TextField name, creditHours, payment, paymentDue, tuitionDue,fAid;
+private ToggleGroup major, typeOfResident, state;
+private Checkbox international //Checkbox.isSelected()
+    */
+
     void add(ActionEvent event) {
-        String currName = null;
-        Student currStudent = null;
+        String currState;
         String selectedRes = null;
+        Profile tProf = createProfile();
+        boolean isAbroad = false;
+        if(tProf == null)
+            return;
+        String stringChecker = creditHours.getText();
+        if(creditHours.getText().isEmpty() || name.getText().isEmpty()){
+            display.appendText("Invalid Inputs \n");
+            return;
+        }
+        char checker = creditHours.getText().charAt(EMPTY);
+
+        if(!Character.isDigit(checker) && checker!='-') {
+            display.appendText("Invalid credit hours \n" );
+            return;
+        }
+
+
+
+        int credits = Integer.parseInt(creditHours.getText());
+
+        if(tProf == null){
+            return;
+        }
+
+        Date tempDate = new Date("--/--/--");
+
+
         try{
             if(typeOfResident.getSelectedToggle() != null)
                 selectedRes= ((RadioButton) typeOfResident.getSelectedToggle()).getText();
@@ -155,6 +192,146 @@ public class Controller {
             display.appendText("Missing student type.\n");
             return;
         }
+
+
+
+        if(selectedRes.equals("Resident")) {
+            if (credits < NEGCRED) {
+                display.appendText("Credit hours can not be negative \n");
+                return;
+            } else if (credits < MINCRED) {
+                display.appendText("Minimum credit hours is 3. \n");
+                return;
+            }
+            if (credits > MAXCRED) {
+                display.appendText("Credit hours exceed the maximum 24. \n");
+                return;
+            }
+            Resident currRes = new Resident(tProf, credits, tempDate);
+            if (!(this.find(list, currRes) == MISSING)){
+                display.appendText("Student is already in the roster \n");
+                return;
+            }
+            else{
+                list.add(currRes);
+                display.appendText("Student added \n");
+            }
+
+        }
+        else if(selectedRes.equals("Non-Resident")){
+            if(credits < NEGCRED) {
+                display.appendText("Credit hours can not be negative\n");
+                return;
+            }
+            else if(credits < MINCRED){
+                display.appendText("Minimum credit hours is 3.\n");
+                return;
+            }
+            if(credits > MAXCRED){
+                display.appendText("Credit hours exceed the maximum 24.\n");
+                return;
+            }
+            NonResident currRes = new NonResident(tProf,credits,tempDate);
+            if (!(this.find(list,currRes) == MISSING)) {
+                display.appendText("Student is already in the roster\n");
+                return;
+            }
+            else{
+                list.add(currRes);
+                display.appendText("Student added\n");
+            }
+
+        }
+        else if(selectedRes.equals("TriState")){
+
+            try{
+                if(state.getSelectedToggle() != null)
+                    currState= ((RadioButton) state.getSelectedToggle()).getText();
+                else
+                    throw new Exception();
+            }catch(Exception e){
+                display.appendText("Missing State.\n");
+                return;
+            }
+            if(credits < NEGCRED) {
+                display.appendText("Credit hours can not be negative\n");
+                return;
+            }
+            else if(credits < MINCRED){
+                display.appendText("Minimum credit hours is 3. \n");
+                return;
+            }
+            if(credits > MAXCRED){
+                display.appendText("Credit hours exceed the maximum 24. \n");
+                return;
+            }
+
+            TriState currTriState = new TriState(tProf,credits,tempDate,currState);
+            if (!(this.find(list,currTriState) == MISSING)){
+                display.appendText("Student is already in the roster \n");
+                return;
+            }
+            else{
+                list.add(currTriState);
+                display.appendText("Student added \n");
+            }
+        }
+        else if(selectedRes.equals("International"))
+        {
+            if (credits < NEGCRED) {
+                display.appendText("Credit hours can not be negative. \n");
+                return;
+            }else if (credits < MINCRED) {
+                display.appendText("Minimum credit hours is 3. \n");
+                return;
+            }else if (credits < INTERNATIONALCREDIT) {
+                display.appendText("International students must enroll at least 12 credits. \n");
+                return;
+            }
+            if (credits > MAXCRED) {
+                display.appendText("Credit hours exceed the maximum 24. \n");
+                return;
+            }
+
+            if(international.isSelected()){
+                isAbroad = true;
+            }
+            else{
+                isAbroad = false;
+            }
+            International currInt = new International(tProf,credits,tempDate,isAbroad);
+
+            if (!(this.find(list,currInt) == MISSING)) {
+                display.appendText("Student is already in the roster\n");
+                return;
+            }
+            else{
+                list.add(currInt);
+                display.appendText("Student added \n");
+            }
+        }
+        else{
+            display.appendText("Type of student does not exist\n");
+            return;
+        }
+        //display.appendText(list.printStudent() + "\n");
+
+        typeOfResident.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+
+        state.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+
+        major.getToggles().forEach(toggle -> {
+            RadioButton tempButton = (RadioButton) toggle;
+            tempButton.setSelected(false);
+        });
+        this.tab1();
+
     }
 
     Profile createProfile(){
@@ -288,13 +465,127 @@ public class Controller {
         }
         return studentNum;
     }
+
+
     @FXML
-    void remove(ActionEvent event){
-        String name;
-        try{
+    void pay(ActionEvent event){
+        if(sName.getText().isEmpty()){
+            display.appendText("Name not inputted \n");
+            return;
+        }
+        String currName = sName.getText();
+        Major tempMajor = null;
+        if(major.getSelectedToggle() != null)
+        {
+            tempMajor = Major.valueOf(((RadioButton) major.getSelectedToggle()).getText());
+        }
+        else
+        {
+            display.appendText("Missing student major \n");
+            return;
+        }
+        Profile tempProf = new Profile(currName,tempMajor);
+        Student currStudent = new Student(tempProf);
+        if(find(list,currStudent) == MISSING){
+            display.appendText("Student not in roster \n");
+            return;
+        }
+        if(paymentDate.getValue() == null){
+            display.appendText("Date not selected \n");
+            return;
+        }
+        if(paymentAmount.getText().isEmpty()){
+            display.appendText("Payment Amount is empty \n");
+            return;
+        }
+        double pay = Double.parseDouble(paymentAmount.getText());
+        if(pay < EMPTY){
+            display.appendText("Can not have negative payment \n");
+            return;
+        }else if(pay > list.getRoster()[this.find(list,currStudent)].getTuition()){
+            display.appendText("Amount is greater than amount due \n");
+            return;
+        }
+        String date = paymentDate.getValue().toString();
+        Date payDate = new Date(date);
+        if(!payDate.isValid()){
+            display.appendText("Payment date invalid \n");
+            return;
+        }
+        list.getRoster()[this.find(list,currStudent)].updateTuition(pay, payDate);
+        display.appendText("Payment applied. \n");
+        tab2();
+    }
+
+    @FXML
+    void set(ActionEvent event){
+        if(sName.getText().isEmpty()){
+            display.appendText("Name not inputted \n");
+            return;
+        }
+        String currName = sName.getText();
+        Major tempMajor = null;
+        if(major.getSelectedToggle() != null)
+        {
+            tempMajor = Major.valueOf(((RadioButton) major.getSelectedToggle()).getText());
+        }
+        else
+        {
+            display.appendText("Missing student major \n");
+            return;
+        }
+        Profile tempProf = new Profile(currName,tempMajor);
+        Student currStudent = new Student(tempProf);
+        if(find(list,currStudent) == MISSING){
+            display.appendText("Student not in roster \n");
+            return;
+        }
+        if(fAid.getText().isEmpty()){
+            display.appendText("Financial Aid Amount missing \n");
+            return;
+        }
+        double financial = Double.parseDouble(fAid.getText());
+        int currIndex = this.find(list,currStudent);
+        if(currIndex != MISSING){
+            if(list.getRoster()[currIndex].getCredits() < INTERNATIONALCREDIT){
+                display.appendText("Parttime student doesn't qualify for the award \n");
+                return;
+            }
+            if(list.getRoster()[currIndex] instanceof Resident){
+                if(((Resident) list.getRoster()[currIndex]).getReceivedAid()){
+                    display.appendText("Awarded once already. \n");
+                    return;
+                }
+                ((Resident) list.getRoster()[currIndex]).setReceivedAid(financial);
+                display.appendText("Tuition updated. \n");
+            }
+            else
+            {
+                display.appendText("Not a resident student. \n");
+                return;
+            }
+        }
+        else
+            display.appendText("Student is not in the roster \n");
+        tab2();
+
+    }
 
 
+    @FXML
+    void print(ActionEvent event){
+        display.appendText(list.print() +"\n");
+    }
 
+    @FXML
+    void printName(ActionEvent event){
+        display.appendText(list.printByName()+ "\n");
+    }
+
+    @FXML
+    void printPayment(ActionEvent event){
+        display.appendText(list.printByPaymentDate() +"\n");
+    }
 
 
 }
