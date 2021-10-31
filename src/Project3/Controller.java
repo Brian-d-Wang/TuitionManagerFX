@@ -3,14 +3,11 @@ package Project3;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import javafx.stage.FileChooser.ExtensionFilter;
 
-import javax.swing.*;
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.Scanner;
+/**
+ * Main used for launching the GUI
+ * @author Brian Wang, Kyle Sia
+ */
 
 public class Controller {
     private Roster list = new Roster();
@@ -63,6 +60,9 @@ public class Controller {
         });
     }
 
+    /**
+     * clears tab1 except the students tuition display
+     */
     @FXML
     void tab1Tuition(){
         if(!name.getText().isEmpty())
@@ -83,6 +83,9 @@ public class Controller {
         });
     }
 
+    /**
+     * clears all inputs from tab2
+     */
     @FXML
     void tab2(){
         if(!sName.getText().isEmpty())
@@ -98,6 +101,10 @@ public class Controller {
         });
     }
 
+    /**
+     * disables buttons if they are a tristate student
+     * @param event
+     */
     @FXML
     void isATriState(ActionEvent event){
         state.getToggles().forEach(toggle -> {
@@ -108,6 +115,10 @@ public class Controller {
         international.setDisable(true);
     }
 
+    /**
+     * disables buttons if they are an international student
+     * @param event
+     */
     @FXML
     void isInternational(ActionEvent event){
         state.getToggles().forEach(toggle -> {
@@ -120,6 +131,10 @@ public class Controller {
 
     }
 
+    /**
+     * disables buttons if they are a resident
+     * @param event
+     */
     @FXML
     void isAResident(ActionEvent event){
         state.getToggles().forEach(toggle -> {
@@ -131,6 +146,10 @@ public class Controller {
         international.setSelected(false);
     }
 
+    /**
+     * disables buttons if they are a nonresident
+     * @param event
+     */
     @FXML
     void isNonResident(ActionEvent event){
         state.getToggles().forEach(toggle -> {
@@ -147,12 +166,6 @@ public class Controller {
      * @param event
      */
     @FXML
-    /*remove later
-private TextField name, creditHours, payment, paymentDue, tuitionDue,fAid;
-private ToggleGroup major, typeOfResident, state;
-private Checkbox international //Checkbox.isSelected()
-    */
-
     void add(ActionEvent event) {
         String currState;
         String selectedRes = null;
@@ -171,18 +184,11 @@ private Checkbox international //Checkbox.isSelected()
             display.appendText("Invalid credit hours \n" );
             return;
         }
-
-
-
         int credits = Integer.parseInt(creditHours.getText());
-
         if(tProf == null){
             return;
         }
-
         Date tempDate = new Date("--/--/--");
-
-
         try{
             if(typeOfResident.getSelectedToggle() != null)
                 selectedRes= ((RadioButton) typeOfResident.getSelectedToggle()).getText();
@@ -192,9 +198,6 @@ private Checkbox international //Checkbox.isSelected()
             display.appendText("Missing student type.\n");
             return;
         }
-
-
-
         if(selectedRes.equals("Resident")) {
             if (credits < NEGCRED) {
                 display.appendText("Credit hours can not be negative \n");
@@ -334,6 +337,10 @@ private Checkbox international //Checkbox.isSelected()
 
     }
 
+    /**
+     * creates a profile, taking in name and major from the inputs
+     * @return
+     */
     Profile createProfile(){
         String specialChar = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~0123456789";
         String studentName = name.getText();
@@ -361,6 +368,11 @@ private Checkbox international //Checkbox.isSelected()
         return(new Profile(studentName, tempMajor));
     }
 
+    /**
+     * Event handler for the remove student button
+     * removes student based on user input
+     * @param event
+     */
     @FXML
     void remove(ActionEvent event){
         if(name.getText().isEmpty()){
@@ -402,6 +414,10 @@ private Checkbox international //Checkbox.isSelected()
         this.tab1();
     }
 
+    /**
+     * event handler for tuition due button
+     * calculates tuition for one student and updates it in roster
+     */
     @FXML
     void calcStudent(){
         if(!payment.getText().isEmpty())
@@ -436,6 +452,11 @@ private Checkbox international //Checkbox.isSelected()
     }
 
 
+    /**
+     * event handler for the calculate button
+     * calculates all students tuition
+     * @param event
+     */
     @FXML
     void calcTuition(ActionEvent event){
         if(list.getSize() == EMPTY){
@@ -467,6 +488,11 @@ private Checkbox international //Checkbox.isSelected()
     }
 
 
+    /**
+     * event handler for pay button
+     * Makes a payment based off user input
+     * @param event
+     */
     @FXML
     void pay(ActionEvent event){
         if(sName.getText().isEmpty()){
@@ -517,6 +543,11 @@ private Checkbox international //Checkbox.isSelected()
         tab2();
     }
 
+    /**
+     * Event handler for set button
+     * Sets a students financial aid amount
+     * @param event
+     */
     @FXML
     void set(ActionEvent event){
         if(sName.getText().isEmpty()){
@@ -572,16 +603,31 @@ private Checkbox international //Checkbox.isSelected()
     }
 
 
+    /**
+     * event handler for print as is button
+     * prints all students in roster as is
+     * @param event
+     */
     @FXML
     void print(ActionEvent event){
         display.appendText(list.print() +"\n");
     }
 
+    /**
+     * event handler for print by name button
+     * prints all students based on name
+     * @param event
+     */
     @FXML
     void printName(ActionEvent event){
         display.appendText(list.printByName()+ "\n");
     }
 
+    /**
+     * event handler for print by payment button
+     * prints all students based on their payment
+     * @param event
+     */
     @FXML
     void printPayment(ActionEvent event){
         display.appendText(list.printByPaymentDate() +"\n");

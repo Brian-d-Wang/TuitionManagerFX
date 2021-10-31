@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     /**
-     * Starts the JavaFX for tuition
+     * Starts the JavaFX for tuitionManager
      * @param primaryStage
      */
     @Override
