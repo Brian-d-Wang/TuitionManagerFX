@@ -57,7 +57,7 @@ public class International extends NonResident {
         if (this.getCredits() > NOEXTRAFEECAP)  //case for 17-24 credits
             this.setTuition(ADDFEE + NONRESTUITION + FULLTIMEUNIFEE + (this.getCredits() - NOEXTRAFEECAP)
                     * NONRESIDENTCREDITHOUR);
-        else if (this.getCredits() < MINFULLTIME) //case for 3-16
+        else if (this.getCredits() < MINFULLTIME) //case for 3-11
             this.setTuition(ADDFEE + NONRESTUITION + FULLTIMEUNIFEE);
         else //case for 12-16 credits
             this.setTuition(ADDFEE + NONRESTUITION + FULLTIMEUNIFEE);
