@@ -167,6 +167,7 @@ public class Controller {
      */
     @FXML
     void add(ActionEvent event) {
+        paymentDate.getEditor().setEditable(false);
         String currState;
         String selectedRes = null;
         Profile tProf = createProfile();
@@ -487,6 +488,14 @@ public class Controller {
         return studentNum;
     }
 
+    /**
+     * Action Event handler for help->about button
+     * @param event
+     */
+    @FXML
+    void help(ActionEvent event){
+        display.appendText("Tuition Manager Project With JavaFX by Brian Wang and Kyle Sia \n");
+    }
 
     /**
      * event handler for pay button
@@ -576,6 +585,10 @@ public class Controller {
             return;
         }
         double financial = Double.parseDouble(fAid.getText());
+        if(financial < EMPTY){
+            display.appendText("Financial aid amount can not be negative \n");
+            return;
+        }
         int currIndex = this.find(list,currStudent);
         if(currIndex != MISSING){
             if(list.getRoster()[currIndex].getCredits() < INTERNATIONALCREDIT){
